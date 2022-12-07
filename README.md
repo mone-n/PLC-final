@@ -162,3 +162,18 @@ validated each token.
 ```
 
 # Question 5 #
+### Denotational semantics to define selection statement ###  
+```
+<selection>  -->  'if' '(' <bool_relation> ')' '{' <start> '}'
+```
+```
+M_sel( if ( <bool_relation> ) { <start> }, s) ==>
+    if M_br( <bool_relation>, s) == error
+        return error
+    if M_br( <bool_relation>, s) == False
+        return s
+    else
+        if M_st( <start>, s) == error
+            return error
+        return M_st( <start>, s)
+```
