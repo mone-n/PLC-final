@@ -43,13 +43,23 @@ lexeme at index  7 is invalid
 regex for real literal:  
  - optional - or +, followed by any number of 0-9, a decimal  
  then at least one 0-9
-```([-+]?[0-9]*[.][0-9]+)```
+```
+([-+]?[0-9]*[.][0-9]+)
+```
 regex for natural literal:  
  - optional - or +, followed by at least one 0-9
-```([-+]?[0-9]+)```
+```
+([-+]?[0-9]+)
+```
 regex for bool literal:  
-```((?<![a-zA-Z0-9_])True(?![a-zA-Z0-9_])|(?<![a-zA-Z0-9_])False(?![a-zA-Z0-9_]))```
+```
+((?<![a-zA-Z0-9_])True(?![a-zA-Z0-9_])|(?<![a-zA-Z0-9_])False(?![a-zA-Z0-9_]))
+```
 regex for char literal:  
-```([-+]?[0-9]*[.][0-9]+)```
+```
+([-+]?[0-9]*[.][0-9]+)
+```
 regex for String literal:  
-```([-+]?[0-9]*[.][0-9]+)```
+```
+([-+]?[0-9]*[.][0-9]+)
+```
