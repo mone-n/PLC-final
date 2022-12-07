@@ -29,5 +29,5 @@ class Compiler:
 
 
 if __name__ == "__main__":
-	file = open("test_file.txt", "r")
+	file = open("test_file4.txt", "r")
 	compiler = Compiler(file)
