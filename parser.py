@@ -93,9 +93,9 @@ class Parser:
 	- GRAMMAR RULES -
 
 	<start>          -->  {<statement>}
-	<statment>       -->  <block> | <conditional> | <while_loop> | <declaration> | <assignment>
+	<statment>       -->  <block> | <selection> | <while_loop> | <declaration> | <assignment>
 	<block>          -->  '{' <start> '}'
-	<conditional>    -->  'if' '(' <bool_relation> ')' '{' <start> '}' [<else_statement>|<elif_statement>]
+	<selection>      -->  'if' '(' <bool_relation> ')' '{' <start> '}' [<else_statement>|<elif_statement>]
 	<while_loop>     -->  'while' '(' <bool_relation> ')' '{' <start> '}'
 	<declaration>    -->  <var_declare> | <func_declare>
 	<assignment>     -->  [a-zA-Z_][a-zA-Z0-9_]* '=' <bool_relation>
@@ -130,7 +130,7 @@ class Parser:
 			self.statement(this_parse)
 
 
-	# <statment>  -->  <block> | <conditional> | <while_loop> | <declaration> | <assignment>
+	# <statment>  -->  <block> | <selection> | <while_loop> | <declaration> | <assignment>
 	def statement(self, parent):
 
 		this_parse = Parse_Tree("statement", [self.curr_token.lexeme])
@@ -143,7 +143,7 @@ class Parser:
 
 		# test for if statement
 		elif self.curr_token.lexeme == "if":
-			self.conditional(this_parse)
+			self.selection(this_parse)
 
 		# test for while loop
 		elif self.curr_token.lexeme == "while":
@@ -183,10 +183,10 @@ class Parser:
 			self.error()
 
 
-	# <conditional>  -->  'if' '(' <bool_relation> ')' '{' <start> '}' [<else_statement>|<elif_statement>]
-	def conditional(self, parent):
+	# <selection>  -->  'if' '(' <bool_relation> ')' '{' <start> '}' [<else_statement>|<elif_statement>]
+	def selection(self, parent):
 
-		this_parse = Parse_Tree("conditional", [self.curr_token.lexeme])
+		this_parse = Parse_Tree("selection", [self.curr_token.lexeme])
 		parent.add_child(this_parse)
 		self.curr_parse = this_parse
 

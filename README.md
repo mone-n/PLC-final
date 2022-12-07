@@ -16,7 +16,7 @@ Then attempts to parse the file with ![parser.py](./parser.py).
 
 # Question 3 #
 ![lexer.py](./lexer.py) attempts to convert a given text string  
-into tokens. Stops when an invalid token is detected.  
+into Token objects. Stops when an invalid token is detected.  
 Example valid output:  
 ```
 Lexeme at index  0 is: def             Token is (15) function declaration
@@ -40,6 +40,14 @@ Lexeme at index  6 is: a               Token is (37) variable or function identi
 lexeme at index  7 is invalid
 ```
 ### Regex ###
+regex for comments:
+ - matches any whitespace or non whitespace characters  
+ between triple apostrophes. (Multiline comments)
+ - also matches any single characters an unlimited number  
+ of times on a single line, preceded by a #
+```
+('''[\s\S]*''')|(#.*)
+```
 regex for real literal:  
  - optional - or +, followed by any number of 0-9, a decimal  
  then at least one 0-9
@@ -90,4 +98,35 @@ regex for identifying variable or function names:
  cant start with a number however.
 ```
 ([a-zA-Z_][a-zA-Z0-9_]*)
+```
+
+# Question 4 #
+![parser.py](./parser.py) attempt to parse through a given list  
+of Token objects, making sure it is syntactically correct. Gets  
+called only if the Lexer succedes
+
+### Grammar Rules ###
+```
+<start>          -->  {<statement>}
+<statment>       -->  <block> | <selection> | <while_loop> | <declaration> | <assignment>
+<block>          -->  '{' <start> '}'
+<selection>      -->  'if' '(' <bool_relation> ')' '{' <start> '}' [<else_statement>|<elif_statement>]
+<while_loop>     -->  'while' '(' <bool_relation> ')' '{' <start> '}'
+<declaration>    -->  <var_declare> | <func_declare>
+<assignment>     -->  [a-zA-Z_][a-zA-Z0-9_]* '=' <bool_relation>
+<bool_relation>  -->  <bool_expr> {'!=='|'==' <bool_expr>}
+<else_statement> -->  'else' '{' <start> '}'
+<elif_statement> -->  'elif' '(' <bool_relation> ')' '{' <start> '}' [<else_statement>|<elif_statement>]
+<var_declare>    -->  ('String'|'int'|'char'|'float'|'bool') [a-zA-Z_][a-zA-Z0-9_]*
+<func_declare>   -->  'def' [a-zA-Z_][a-zA-Z0-9_]* '(' {[a-zA-Z_][a-zA-Z0-9_]* ','} ')'
+				 	  '{' <start> '}'
+<bool_expr>      -->  <expr> {'<=='|'>=='|'<'|'>' <expr>}
+<expr>           -->  <term> {'+'|'-' <term>}
+<term>           -->  <exp> {'*'|'/' <exp>}
+<exp>            -->  <logical> {'^' <logical>}
+<logical>        -->  <factor> {'~'|'&'|'|' <factor>}
+<factor>         -->  [a-zA-Z_][a-zA-Z0-9_]* | [-+]?[0-9]*[.][0-9]+ | [-+]?[0-9]+ | 
+                      ((?<![a-zA-Z0-9_])True(?![a-zA-Z0-9_])|(?<![a-zA-Z0-9_])False(?![a-zA-Z0-9_]))
+					  | '[ -~]' | \'(\\\\.|[^\'\\\\])*\' | '(' <bool_relation> ')'
+					  | [a-zA-Z_][a-zA-Z0-9_]* '(' {[a-zA-Z_][a-zA-Z0-9_]* ','} ')'
 ```

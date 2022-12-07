@@ -1,3 +1,2 @@
-def func() {
-	int a
-}
+String hi
+hi = 'hello world\n'

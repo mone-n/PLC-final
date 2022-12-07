@@ -88,7 +88,6 @@ class Lexer:
 		for i in range(len(keyword_regex)):
 			keyword_regex[i] = "((?<![a-zA-Z0-9_])" + keyword_regex[i] + "(?![a-zA-Z0-9_]))"
 		keyword_regex = "|".join(keyword_regex)
-		print(keyword_regex)
 
 		# special symbols for math, boolean operations, code
 		# separation, etc.
