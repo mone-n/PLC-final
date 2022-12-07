@@ -105,6 +105,36 @@ regex for identifying variable or function names:
 of Token objects, making sure it is syntactically correct. Gets  
 called only if the Lexer succedes
 
+### Parse Tree ###
+Example parse tree for a small program:  
+```
+String hi
+hi = 'hello world\n'
+```
+```
+func: ()
+ func: start()
+  func: statement()
+   func: declaration()
+    func: var_declare() - tokens validated: String, hi
+  func: statement()
+   func: assignment() - tokens validated: hi, =
+    func: bool_relation()
+     func: bool_expr()
+      func: expr()
+       func: term()
+        func: exp()
+         func: logical()
+          func: factor() - tokens validated: 'hello world\n'
+```
+The parse tree reads kind of like a file system, where nodes  
+without spaces ahead of them are root nodes, and the nodes  
+directly underneath are its children.  
+  
+The parse tree lets the user know which function has validated  
+which tokens, and what chain of functions was called to  
+validated each token.
+
 ### Grammar Rules ###
 ```
 <start>          -->  {<statement>}
@@ -119,7 +149,7 @@ called only if the Lexer succedes
 <elif_statement> -->  'elif' '(' <bool_relation> ')' '{' <start> '}' [<else_statement>|<elif_statement>]
 <var_declare>    -->  ('String'|'int'|'char'|'float'|'bool') [a-zA-Z_][a-zA-Z0-9_]*
 <func_declare>   -->  'def' [a-zA-Z_][a-zA-Z0-9_]* '(' {[a-zA-Z_][a-zA-Z0-9_]* ','} ')'
-				 	  '{' <start> '}'
+                      '{' <start> '}'
 <bool_expr>      -->  <expr> {'<=='|'>=='|'<'|'>' <expr>}
 <expr>           -->  <term> {'+'|'-' <term>}
 <term>           -->  <exp> {'*'|'/' <exp>}
@@ -127,6 +157,8 @@ called only if the Lexer succedes
 <logical>        -->  <factor> {'~'|'&'|'|' <factor>}
 <factor>         -->  [a-zA-Z_][a-zA-Z0-9_]* | [-+]?[0-9]*[.][0-9]+ | [-+]?[0-9]+ | 
                       ((?<![a-zA-Z0-9_])True(?![a-zA-Z0-9_])|(?<![a-zA-Z0-9_])False(?![a-zA-Z0-9_]))
-					  | '[ -~]' | \'(\\\\.|[^\'\\\\])*\' | '(' <bool_relation> ')'
-					  | [a-zA-Z_][a-zA-Z0-9_]* '(' {[a-zA-Z_][a-zA-Z0-9_]* ','} ')'
+                      | '[ -~]' | \'(\\\\.|[^\'\\\\])*\' | '(' <bool_relation> ')'
+                      | [a-zA-Z_][a-zA-Z0-9_]* '(' {[a-zA-Z_][a-zA-Z0-9_]* ','} ')'
 ```
+
+# Question 5 #

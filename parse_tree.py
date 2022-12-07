@@ -6,11 +6,13 @@ class Parse_Tree:
 		self.children = []
 		self.parent = None
 
+	# adds a child to the tree
 	def add_child(self, child):
 		self.child = child
 		child.parent = self
 		self.children.append(child)
 
+	# get the depth of a node in the tree
 	def get_depth(self):
 		depth = 0
 		p = self.parent
@@ -19,6 +21,8 @@ class Parse_Tree:
 			depth += 1
 		return depth
 
+	# prints tree, each space at the beginning of each
+	# line denotes how deep this node is in the tree.
 	def print_tree(self):
 		print(' ' * self.get_depth(), end='')
 
