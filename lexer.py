@@ -76,7 +76,7 @@ class Lexer:
 		# match a series of non ' characters while
 		# disallowing \ characters without an escaped
 		# character after it. between two ' characters
-		string_literal_regex = "(\'(\\\\.|[^\'\\\\])*\')"
+		string_literal_regex = "('(\\\\.|[^\'\\\\])*')"
 
 		# build regex patterns for keywords
 		keyword_regex = ["if","else","elif","while",\
@@ -88,6 +88,7 @@ class Lexer:
 		for i in range(len(keyword_regex)):
 			keyword_regex[i] = "((?<![a-zA-Z0-9_])" + keyword_regex[i] + "(?![a-zA-Z0-9_]))"
 		keyword_regex = "|".join(keyword_regex)
+		print(keyword_regex)
 
 		# special symbols for math, boolean operations, code
 		# separation, etc.

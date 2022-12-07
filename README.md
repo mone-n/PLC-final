@@ -52,14 +52,28 @@ regex for natural literal:
 ([-+]?[0-9]+)
 ```
 regex for bool literal:  
+ - The word 'True' or 'False' without a leading or following  
+ alphanumeric character or underscore
 ```
 ((?<![a-zA-Z0-9_])True(?![a-zA-Z0-9_])|(?<![a-zA-Z0-9_])False(?![a-zA-Z0-9_]))
 ```
 regex for char literal:  
+ - any character between space and ~, can be optionally escaped.  
+ enclosed in apostrophes.
 ```
-([-+]?[0-9]*[.][0-9]+)
+('\\?[ -~]')
 ```
 regex for String literal:  
+ - any number of non apostrophe or unescaped characters eclosed  
+ in apostrophes.
 ```
-([-+]?[0-9]*[.][0-9]+)
+('(\\.|[^'\\])*')
+```
+regex for any given keyword:
+ - matches a keyword exactly without a leading or following  
+ alphanumeric character or underscore
+ - keywords include "if", "else", "elif", "while", "String",  
+ "int", "char", "float", "bool", or "def"
+```
+(?<![a-zA-Z0-9_])KEYWORD(?![a-zA-Z0-9_])
 ```
