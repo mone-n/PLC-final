@@ -1,7 +1,6 @@
-from token import Token
 from lexer import Lexer
 from parser import Parser
-# from syntax_analyzer import RDA
+
 
 class Compiler:
 	def __init__(self, file):
@@ -15,13 +14,18 @@ class Compiler:
 		# attempt to tokenize the file_string
 		if lexer.tokenize():
 			tokens = lexer.tokens
+
+			# if a file has tokens, attempt to parse it
 			if tokens != []:
 				parser = Parser(tokens)
 				parser.start(parser.parse_tree)
+
+				# print the parse tree to console
 				parser.parse_tree.print_tree()
+
+		# failed tokenization, print the location of the failed lexeme
 		else:
 			print("lexeme at index {:2d} is invalid\n".format(len(lexer.tokens)))
-
 
 
 if __name__ == "__main__":
