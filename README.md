@@ -64,16 +64,30 @@ regex for char literal:
 ('\\?[ -~]')
 ```
 regex for String literal:  
- - any number of non apostrophe or unescaped characters eclosed  
+ - any number of non apostrophe or unescaped characters enclosed  
  in apostrophes.
 ```
 ('(\\.|[^'\\])*')
 ```
-regex for any given keyword:
+regex for any given keyword:  
  - matches a keyword exactly without a leading or following  
- alphanumeric character or underscore
+ alphanumeric character or underscore  
  - keywords include "if", "else", "elif", "while", "String",  
  "int", "char", "float", "bool", or "def"
 ```
 (?<![a-zA-Z0-9_])KEYWORD(?![a-zA-Z0-9_])
+```
+regex for any reserved symbol:  
+ - pretty simple, each reserved symbol is its own regex, all  
+ of them are escaped so I dont have to worry if regex can read them.  
+ - symbols include: \+, \-, \*, \/, \^, \(, \), \>\=\=, \<\=\=,  
+  \>, \<, \=\=, \!\=\=, \=, \~, \!, \&, \|, \{, \}, \,
+```
+(SYMBOL)
+```
+regex for identifying variable or function names:  
+ - can be any number of alphanumeric or underscore characters  
+ cant start with a number however.
+```
+([a-zA-Z_][a-zA-Z0-9_]*)
 ```
