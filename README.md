@@ -236,7 +236,7 @@ M_e( <l_term> {<operator> <r_term>}, s) ==>
  - ##### No other types are allowed to be assigned to others outside of their own #####  
  - ##### Dividing by zero is an error #####  
  - ##### Modulo operating by zero is an error #####  
-```
+``` 
 Syntax Rule:   <assignment> --> <var> '=' <bool_relation>
 Semantic Rule: <bool_relation>.expected_type <-- <var>.actual_type
 
@@ -247,14 +247,12 @@ Semantic Rule: <
 ### 3 syntactically valid assignment statements ###
 
 # Question 11 #
-### Find Weakest Precondition ###  
-- a. 
+### Find Weakest Precondition ###   
 ```
 a = 2 * (b - 1) - 1 {a > 0}
 ```
-   - plug in a = 0, b = 1.5  
-   - b = 1.5, weakest precondition: {b > 1.5}  
-- b. 
+ - plug in a = 0, b = 1.5  
+ - b = 1.5, weakest precondition: {b > 1.5}  
 ```
 if (x < y)
 	x = x + 1
@@ -262,3 +260,13 @@ else
 	x = 3 * x
 {x < 0}
 ```  
+ - Two conditions need to be met:
+    - x = x + 1 {x < 0}
+    - x = 3 * x {x < 0}
+ - x = x + 1 {x < 0}
+    - 0 = x + 1
+    - {x < -1}
+ - x = 3 * x {x < 0}
+    - 0 = 3 * x
+    - {x < 0}
+ - Weakest precondition: {x < 0}
