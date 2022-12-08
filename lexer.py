@@ -26,24 +26,25 @@ class Lexer:
 			17: "subtraction symbol",
 			18: "multiplication symbol",
 			19: "division symbol",
-			20: "exponentiation symbol",
-			21: "left parentheses",
-			22: "right parentheses",
-			23: "greater than or equal too symbol",
-			24: "less than or equal too symbol",
-			25: "greater than symbol",
-			26: "less than symbol",
-			27: "equal too symbol",
-			28: "not equal too symbol",
-			29: "assignment symbol",
-			30: "unary negation symbol",
-			31: "logical not symbol",
-			32: "logical and symbol",
-			33: "logical or symbol",
-			34: "left curly brace",
-			35: "right curly brace",
-			36: "parameter separator",
-			37: "variable or function identifier"
+			20: "modulus symbol",
+			21: "exponentiation symbol",
+			22: "left parentheses",
+			23: "right parentheses",
+			24: "greater than or equal too symbol",
+			25: "less than or equal too symbol",
+			26: "greater than symbol",
+			27: "less than symbol",
+			28: "equal too symbol",
+			29: "not equal too symbol",
+			30: "assignment symbol",
+			31: "unary negation symbol",
+			32: "logical not symbol",
+			33: "logical and symbol",
+			34: "logical or symbol",
+			35: "left curly brace",
+			36: "right curly brace",
+			37: "parameter separator",
+			38: "variable or function identifier"
 		}
 
 
@@ -91,7 +92,7 @@ class Lexer:
 
 		# special symbols for math, boolean operations, code
 		# separation, etc.
-		special_symbols_regex = "(\+)|(\-)|(\*)|(\/)|(\^)|(\()|(\))|" +\
+		special_symbols_regex = "(\+)|(\-)|(\*)|(\/)|(\%)|(\^)|(\()|(\))|" +\
 		"(\>\=\=)|(\<\=\=)|(\>)|(\<)|(\=\=)|(\!\=\=)|(\=)|(\~)|(\!)|(\&)|" +\
 		"(\|)|(\{)|(\})|(\,)"
 

@@ -107,7 +107,7 @@ class Parser:
 					 	  '{' <start> '}'
 	<bool_expr>      -->  <expr> {'<=='|'>=='|'<'|'>' <expr>}
 	<expr>           -->  <term> {'+'|'-' <term>}
-	<term>           -->  <exp> {'*'|'/' <exp>}
+	<term>           -->  <exp> {'*'|'/'|'%' <exp>}
 	<exp>            -->  <logical> {'^' <logical>}
 	<logical>        -->  <factor> {'~'|'&'|'|' <factor>}
 	<factor>         -->  [a-zA-Z_][a-zA-Z0-9_]* | [-+]?[0-9]*[.][0-9]+ | [-+]?[0-9]+ | 
@@ -478,7 +478,7 @@ class Parser:
 			self.term(this_parse)
 
 			
-	# <term>  -->  <exp> {'*'|'/' <exp>}
+	# <term>  -->  <exp> {'*'|'/'|'%' <exp>}
 	def term(self, parent):
 
 		this_parse = Parse_Tree("term", [self.curr_token.lexeme])
@@ -486,7 +486,7 @@ class Parser:
 		self.curr_parse = this_parse
 
 		self.exp(this_parse)
-		while self.curr_token.lexeme in ['*', '/']:
+		while self.curr_token.lexeme in ['*', '/', '%']:
 			self.next_token(this_parse)
 			self.exp(this_parse)
 

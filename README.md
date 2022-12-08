@@ -152,7 +152,7 @@ validated each token.
                       '{' <start> '}'
 <bool_expr>      -->  <expr> {'<=='|'>=='|'<'|'>' <expr>}
 <expr>           -->  <term> {'+'|'-' <term>}
-<term>           -->  <exp> {'*'|'/' <exp>}
+<term>           -->  <exp> {'*'|'/'|'%' <exp>}
 <exp>            -->  <logical> {'^' <logical>}
 <logical>        -->  <factor> {'~'|'&'|'|' <factor>}
 <factor>         -->  [a-zA-Z_][a-zA-Z0-9_]* | [-+]?[0-9]*[.][0-9]+ | [-+]?[0-9]+ | 
@@ -226,4 +226,16 @@ M_e( <l_term> {<operator> <r_term>}, s) ==>
 
 # Question 9 #
 ### Attribute grammar for assignment statement ###
- - ### String + String does concatenation ###
+ - ##### String + String does concatenation #####  
+ - ##### String * Natural repeats the String #####  
+ - ##### Assign bool to natural is allowed #####  
+ - ##### Assign natural to bool is allowed #####  
+ - ##### Assign char to natural is allowed #####  
+ - ##### Assign natural to char is allowed #####  
+ - ##### Assign natural to real is allowed #####  
+ - ##### No other types are allowed to be assigned to others outside of their own #####  
+ - ##### Dividing by zero is an error #####  
+ - ##### Modulo operating by zero is an error #####  
+```
+
+```
