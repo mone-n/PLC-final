@@ -248,7 +248,10 @@ Semantic Rule: <
 
 # Question 11 #
 ### Find Weakest Precondition ###  
-- a. ```a = 2 * (b - 1) - 1 {a > 0}``` 
+- a. 
+```
+a = 2 * (b - 1) - 1 {a > 0}
+``` 
     - plug in a = 0, b = 1.5  
     - b = 1.5, weakest precondition: {b > 1.5}  
 - b. 
