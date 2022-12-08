@@ -237,5 +237,22 @@ M_e( <l_term> {<operator> <r_term>}, s) ==>
  - ##### Dividing by zero is an error #####  
  - ##### Modulo operating by zero is an error #####  
 ```
+Syntax Rule:   <assignment> --> <var> '=' <bool_relation>
+Semantic Rule: <bool_relation>.expected_type <-- <var>.actual_type
 
+Syntax Rule:   <bool_relation> --> <bool_expr> {'!=='|'==' <bool_expr>}
+Semantic Rule: <
 ```
+# Question 10 #
+### 3 syntactically valid assignment statements ###
+
+# Question 11 #
+### Find Weakest Precondition ###  
+### - a. ```a = 2 * (b - 1) - 1 {a > 0}``` ###
+###     - plug in a = 0, b = 1.5  
+###     - b = 1.5, weakest precondition: {b > 1.5}  
+### - b. ```if (x < y)
+                x = x + 1
+            else
+                x = 3 * x
+            {x < 0}```  
