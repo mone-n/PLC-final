@@ -101,7 +101,7 @@ regex for identifying variable or function names:
 ```
 
 # Question 4 #
-![parser.py](./parser.py) attempt to parse through a given list  
+![parser.py](./parser.py) attempts to parse through a given list  
 of Token objects, making sure it is syntactically correct. Gets  
 called only if the Lexer succedes
 
@@ -163,9 +163,11 @@ validated each token.
 
 # Question 5 #
 ### Denotational semantics to define selection statement ###  
+Grammar for my selection statement  
 ```
 <selection>  -->  'if' '(' <bool_relation> ')' '{' <start> '}'
 ```
+converts to:  
 ```
 M_sel( if ( <bool_relation> ) { <start> }, s) ==>
     if M_br( <bool_relation>, s) == error
@@ -177,3 +179,51 @@ M_sel( if ( <bool_relation> ) { <start> }, s) ==>
             return error
         return M_st( <start>, s)
 ```
+# Question 6 #
+### Denotational semantics to define loop statement ###  
+Grammar for my loop statement  
+```
+<while_loop>  -->  'while' '(' <bool_relation> ')' '{' <start> '}'
+```
+converts to:  
+```
+M_w( 'while' '(' <bool_relation> ')' '{' <start> '}', s) ==>
+    if M_br( <bool_relation>, s) == error
+        return error
+    if M_br( <bool_relation>, s) == False
+        return s
+    else
+        if M_s( <start>, s) == error
+            return error
+        M_w( 'while' '(' <bool_relation> ')' '{' <start> '}', M_s(LS, s))
+```
+# Question 7 #
+### Denotational semantics to define expr statement ###  
+The function (edited to reflect the RDA part without the ParseTree  
+generation part) for my expr statement.
+```
+# <expr>  -->  <term> {'+'|'-' <term>}
+def expr(self):
+        self.term()
+        while self.curr_token.lexeme in ['+', '-']:
+            self.next_token()
+            self.term()
+```
+Converts to:
+```
+M_e( <l_term> {<operator> <r_term>}, s) ==>
+	if M_rt( <r_term>, s ) == error
+		return error
+	if M_lt( <l_term>, s ) == error
+		return error
+    if <operator> == '-'
+        return M_lt( <l_term>, s ) - M_rt( <r_term>, s)
+    if <operator> == '+'
+    	return M_lt( <l_term>, s ) + M_rt( <r_term>, s)
+```
+# Question 8 #
+### redefine Expr statement so it can return a boolean solution ###  
+
+# Question 9 #
+### Attribute grammar for assignment statement ###
+### - String + String does concatenation ###
