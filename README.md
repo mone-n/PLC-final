@@ -223,6 +223,19 @@ M_e( <l_term> {<operator> <r_term>}, s) ==>
 ```
 # Question 8 #
 ### redefine Expr statement so it can return a boolean solution ###  
+Adding booleans is equivalent to the OR function, and in this
+case subtraction will be the same as the AND function
+```
+M_e( <l_term> {<operator> <r_term>}, s) ==>
+    if M_rt( <r_term>, s ) == error
+        return error
+    if M_lt( <l_term>, s ) == error
+        return error
+    if <operator> == '-'
+        return M_lt( <l_term>, s ) and M_rt( <r_term>, s)
+    if <operator> == '+'
+        return M_lt( <l_term>, s ) or M_rt( <r_term>, s)
+```
 
 # Question 9 #
 ### Attribute grammar for assignment statement ###
@@ -236,12 +249,131 @@ M_e( <l_term> {<operator> <r_term>}, s) ==>
  - ##### No other types are allowed to be assigned to others outside of their own #####  
  - ##### Dividing by zero is an error #####  
  - ##### Modulo operating by zero is an error #####  
+The grammar rules for assignment are changed to be readable between  
+Syntax Rules and Semantic Rules, the meaning of the Grammar rule is  
+still the same.  
+```
+<assignment>     -->  <var> '=' <bool_relation>
+<bool_relation>  -->  <bool_expr> {'!=='|'==' <bool_expr>}
+<bool_expr>      -->  <expr> {'<=='|'>=='|'<'|'>' <expr>}
+<expr>           -->  <term> {'+'|'-' <term>}
+<term>           -->  <exp> {'*'|'/'|'%' <exp>}
+<exp>            -->  <logical> {'^' <logical>}
+<logical>        -->  <factor> {'~'|'&'|'|' <factor>}
+<factor>         -->  <var>
+```
+Becomes:
+```
+<assignment>     -->  <var> '=' <bool_relation>
+<bool_relation>  -->  <bool_expr> ('!=='|'==') <bool_expr> | <bool_expr>
+<bool_expr>      -->  <expr> ('<=='|'>=='|'<'|'>') <expr>  | <expr>
+<expr>           -->  <term> ('+'|'-') <term>              | <term>
+<term>           -->  <exp> ('*'|'/'|'%') <exp>            | <exp>
+<exp>            -->  <logical> '^' <logical>              | <logical>
+<logical>        -->  <factor> ('~'|'&'|'|') <factor>      | <factor>
+<factor>         -->  <var>
+```
+
 ``` 
 Syntax Rule:   <assignment> --> <var> '=' <bool_relation>
-Semantic Rule: <bool_relation>.expected_type <-- <var>.actual_type
+Semantic Rule: <bool_relation>.actual_type <-- 
+                    if <var>.actual_type == int and
+                    <bool_relation>.actual_type == bool
+                        then bool
+                    if <var>.actual_type == bool and
+                    <bool_relation>.actual_type == int
+                        then int
+                    if <var>.actual_type == int and
+                    <bool_relation>.actual_type == char
+                        then char
+                    if <var>.actual_type == char and
+                    <bool_relation>.actual_type == int
+                        then int
+                    if <var>.actual_type == float and
+                    <bool_relation>.actual_type == int
+                        then int
+Predicate:     <var>.actual_type == <var>.expected_type
 
-Syntax Rule:   <bool_relation> --> <bool_expr> {'!=='|'==' <bool_expr>}
-Semantic Rule: <
+Syntax Rule:   <bool_relation> --> <bool_expr>[2] ('!=='|'==') <bool_expr>[3]
+Semantic Rule: <bool_relation>.actual_type <-- bool
+Predicate:     <bool_relation>.actual_type == <bool_relation>.expected_type
+
+Syntax Rule:   <bool_relation> --> <bool_expr>
+Semantic Rule: <bool_relation>.actual_type <-- <bool_expr>.actual_type
+Predicate:     <bool_relation>.actual_type == <bool_relation>.expected_type
+
+Syntax Rule:   <bool_expr> --> <expr>[2] ('<=='|'>=='|'<'|'>') <expr>[3]
+Semantic Rule: <bool_expr>.actual_type <-- bool
+Predicate:     <bool_expr>.actual_type == <bool_expr>.expected_type
+
+Syntax Rule:   <bool_expr> --> <expr>
+Semantic Rule: <bool_expr>.actual_type <-- <expr>.actual_type
+Predicate:     <bool_expr>.actual_type == <bool_expr>.expected_type
+
+Syntax Rule:   <expr> --> <term>[2] '+' <term>[3]
+Semantic Rule: <expr>.actual_type <--
+                    if <term>[2].actual_type == String and
+                    <term>[3].actual_type == String
+                        then String
+                    if <term>[2].actual_type == int and
+                    <term>[3].actual_type == int
+                        then int
+                    else float
+                    end if
+Predicate:     <expr>.actual_type == <expr>.expected_type
+
+Syntax Rule:   <expr> --> <term>[2] '-' <term>[3]
+Semantic Rule: <expr>.actual_type <--
+                    if <term>[2].actual_type == int and
+                    <term>[3].actual_type == int
+                        then int
+                    else float
+                    end if
+Predicate:     <expr>.actual_type == <expr>.expected_type
+
+Syntax Rule:   <expr> --> <term>
+Semantic Rule: <expr>.actual_type <-- <term>.actual_type
+Predicate:     <expr>.actual_type == <expr>.expected_type
+
+Syntax Rule:   <term> --> <exp>[2] '*' <exp>[3]
+Semantic Rule: <term>.actual_type <--
+                    if <exp>[2].actual_type == String and
+                    <exp>[3].actual_type == int
+                        then String
+                    if <exp>[2].actual_type == int and
+                    <exp>[3].actual_type == int
+                        then int
+                    else float
+                    end if
+Predicate:     <term>.actual_type == <term>.expected_type
+
+Syntax Rule:   <term> --> <exp>[2] '/'|'%' <exp>[3]
+Semantic Rule: <term>.actual_type <--
+                    if <exp>[2].actual_type == int and
+                    <exp>[3].actual_type == int and
+                    lookup(<exp>[3].value) != 0
+                        then float
+                    if <exp>[2].actual_type == float and
+                    <exp>[3].actual_type == float and
+                    lookup(<exp>[3].value) != 0.0
+                        then float
+                    end if
+Predicate:     <term>.actual_type == <term>.expected_type
+
+Syntax Rule:   <term> --> <exp>
+Semantic Rule: <term>.actual_type <-- <exp>.actual_type
+Predicate:     <term>.actual_type == <term>.expected_type
+
+Syntax Rule:   <exp> --> <logical>[2] '^' <logical>[3]
+Semantic Rule: <exp>.actual_type <-- float
+Predicate:     <exp>.actual_type == <exp>.expected_type
+
+Syntax Rule:   <logical> --> <factor>[2] '~'|'&'|'|' <factor>[3]
+Semantic Rule: <logical>.actual_type <-- bool
+Predicate:     <logical>.actual_type == <logical>.expected_type
+
+Syntax Rule:   <factor> --> <var>
+Semantic Rule: <factor>.actual_type <-- lookup(<var>.string)
 ```
 # Question 10 #
 ### 3 syntactically valid assignment statements ###
@@ -270,3 +402,33 @@ else
     - 0 = 3 * x
     - {x < 0}
  - Weakest precondition: {x < 0}
+```
+y = a * 2 * (b - 1) - 1
+if (x < y)
+	x = y + 1
+else
+	x = 3 * x
+{x < 0}
+```
+ - Two conditions need to be met:
+    - x = x + 1 {x < 0}
+    - x = 3 * x {x < 0}  
+ - x = y + 1 {x < 0}
+    - 0 = y + 1
+    - 0 = a * 2 * (b - 1)
+    - {ab - a < 0}
+ - x = 3 * x
+    - {x < 0}
+```
+a = 3 * (2 * b + a)
+b = 2 * a - 1
+{b > 5}
+```
+ - 5 < 2 * a - 1
+ - 6 < 2 * a
+ - 3 < a
+ - this becomes post-condition for: a = 3 * (2 * b + a)
+ - 3 < 3 * (2 * b + a)
+ - 1 < 2 * b + a
+ - 1 - a < 2 * b
+ - weakest precondition: {(1 - a) / 2 < b}
