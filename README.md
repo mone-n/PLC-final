@@ -376,7 +376,32 @@ Syntax Rule:   <factor> --> <var>
 Semantic Rule: <factor>.actual_type <-- lookup(<var>.string)
 ```
 # Question 10 #
-### 3 syntactically valid assignment statements ###
+### Assignment Statements passing syntax, but failing or passing semantics ###
+### 1 ###
+This assignment statement successfully passes syntax analysis
+``` a = 5.0 ^ False - '\n' ```
+However, we can trace the semantic analysis to where the '^' is checked.
+```
+<assignment> -> <bool_relation> -> <bool_expr> -> <expr> -> <term> -> <exp>
+```
+Here 5.0 and False arent both floats, and this statement gets rejected by  
+semantic analysis.  
+### 2 ###
+This assignment statement successfully passes syntax analysis
+``` a = 6 * 'str' + 1 ```
+However, we can trace the semantic analysis to where the '\*' is checked.  
+```
+<assignment> -> <bool_relation> -> <bool_expr> -> <expr> -> <term> 
+```
+Then here we can see that while the type of the first portion of the  
+problem is int, the second portion is String, and doesnt have a type  
+that can be returned, failing the semantic analysis.
+### 3 ###
+This assignment statement successfully passes syntax analysis
+``` a = 'str' * 2 + 'ing' ```
+This assignment statement also passes the semantic analysis because  
+Strings can be multiplied by integers, and then the resulting String can  
+be added to another String.
 
 # Question 11 #
 ### Find Weakest Precondition ###   
